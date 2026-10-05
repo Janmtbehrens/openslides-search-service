@@ -18,7 +18,6 @@ import (
 	"github.com/OpenSlides/openslides-go/auth"
 	"github.com/OpenSlides/openslides-go/collection"
 	"github.com/OpenSlides/openslides-go/environment"
-	"github.com/OpenSlides/openslides-go/redis"
 	"github.com/OpenSlides/openslides-search-service/pkg/config"
 	"github.com/OpenSlides/openslides-search-service/pkg/meta"
 	"github.com/OpenSlides/openslides-search-service/pkg/oserror"
@@ -93,10 +92,8 @@ func run(cfg *config.Config) error {
 	go qs.Run(ctx)
 
 	lookup := new(environment.ForProduction)
-	// Redis as message bus for datastore and logout events.
-	messageBus := redis.New(lookup)
 	// Auth Service.
-	authService, authBackground, err := auth.New(lookup, messageBus)
+	authService, authBackground, err := auth.New(lookup)
 	if err != nil {
 		return err
 	}
